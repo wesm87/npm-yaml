@@ -3,14 +3,16 @@
   name: "npm-yaml"
   description: "A pre-hook for npm to support package.yml"
   version: "0.0.1"
-  repository: 
+  repository:
     url: "http://github.com/saschagehlich/npm-yaml"
   main: "./index.js"
-  dependencies: 
+  dependencies:
     # LAWL I HAZ COMMENTZ
     json2yaml: ">= 1.0.1"
     js-yaml: ">= 1.0.1"
   devDependencies: null
   optionalDependencies: null
-  engines: 
+  engines:
     node: "*"
+  jshintConfig:
+    esversion: 6

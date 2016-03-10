@@ -15,5 +15,9 @@
     "optionalDependencies": null,
     "engines": {
         "node": "*"
+    },
+    "jshintConfig": {
+      "node": true,
+      "esversion": 6
     }
 }

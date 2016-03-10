@@ -15,15 +15,12 @@ class npmYAML {
    */
   constructor() {
 
-    console.log( args.length );
-
     // `npm` actually runs `node npm` so `args.length` == 2 by default.
     if ( args.length > 2 ) {
 
       // Return if not currently running `npm install` or `npm i`.
       let command = args[2];
       if ( command !== 'install' && command !== 'i' ) {
-        console.log( 'Not `npm install`' );
         return;
       }
 
@@ -32,13 +29,17 @@ class npmYAML {
     }
   }
 
+  onError( error ) {
+    console.log( error );
+    return null;
+  }
+
   loadYAML( file ) {
 
     try {
       return yaml.safeLoad( fs.readFileSync( file ) );
     } catch( error ) {
-      console.log( error );
-      return null;
+      return this.onError( error );
     }
 
   }
@@ -48,8 +49,7 @@ class npmYAML {
     try {
       return require( file );
     } catch ( error ) {
-      console.log( error );
-      return null;
+      return this.onError( error );
     }
 
   }
@@ -59,8 +59,7 @@ class npmYAML {
     try {
       return parseJSON( this.loadYAML( file ), null, 2 );
     } catch( error ) {
-      console.log( error );
-      return null;
+      return this.onError( error );
     }
 
   }
@@ -70,8 +69,7 @@ class npmYAML {
     try {
       return parseYAML( this.loadJSON( file ), null, 2 );
     } catch( error ) {
-      console.log( error );
-      return null;
+      return this.onError( error );
     }
 
   }
@@ -85,8 +83,7 @@ class npmYAML {
     try {
       fs.writeFileSync( filePath, content );
     } catch( error ) {
-      console.error( error );
-      return null;
+      return this.onError( error );
     }
 
   }
@@ -104,22 +101,15 @@ class npmYAML {
     let outputFile;
     let inputString;
 
-    console.log( yamlFile );
-    console.log( jsonFile );
-
     if ( fs.existsSync( yamlFile ) ) {
 
       // YAML file exists, convert it to JSON.
       this.writeFile( jsonFile, this.yaml2JSON( yamlFile ) );
 
-      console.log( 'Converting `package.yml` to `package.json`' );
-
     } else if ( fs.existsSync( jsonFile ) ) {
 
       // No YAML file but a JSON file exists, convert it to YAML.
       this.writeFile( yamlFile, this.json2YAML( jsonFile ) );
-
-      console.log( 'Converting `package.json` to `package.yml`' );
 
     }
 
